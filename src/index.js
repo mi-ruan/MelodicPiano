@@ -1,18 +1,10 @@
-import _ from 'lodash';
-import * as Tone from "tone";
+import Piano from "./piano";
 
-  function component() {
-    var element = document.createElement('div');
+const pianoComponent = () => {
+  let element = document.createElement('div');
+  element.classList.add("keyboard-section");
+  element.appendChild(Piano());
+  return element;
+}
 
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-
-    return element;
-  }
-
-  document.body.appendChild(component());
-
-  //create a synth and connect it to the master output (your speakers)
-  var synth = new Tone.Synth().toMaster();
-
-  //play a middle 'C' for the duration of an 8th note
-  synth.triggerAttackRelease("C4", "8n");
+document.body.appendChild(pianoComponent());

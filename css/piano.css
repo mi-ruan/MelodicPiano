@@ -1,0 +1,46 @@
+.keyboard-section {
+  width: 800px;
+  height: 200px;
+  display: flex;
+}
+
+.keyboard {
+  height: 100%;
+  flex-flow: column;
+  display: flex;
+  flex: 4;
+}
+
+.keys {
+  height: 100%;
+  display: flex;
+  flex: 8;
+  justify-content: center;
+}
+
+.key {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid black;
+  box-sizing: border-box;
+}
+
+.key:active {
+  box-sizing: border-box;
+  background-color: orange;
+}
+
+.black {
+  justify-content: center;
+  position: relative;
+  height: 50%;
+  background-color: black;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+  color: white;
+  width: 8%;
+  margin: 0 -4%;
+}
