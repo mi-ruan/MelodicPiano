@@ -17,9 +17,14 @@ const Piano = () => {
     let note = SCALE[i % 12] + (Math.floor(i / 12) + 3);
     let color = colorKeys(i%12);
     key.classList.add('key', `${note}`, `${color}`);
-    key.addEventListener('click', () => {
-      synth.triggerAttackRelease(`${note}`, "8n");
+    key.addEventListener('mousedown', () => {
+      synth.triggerAttack(`${note}`);
     });
+    key.addEventListener('mouseup', () => {
+      synth.triggerRelease();
+    });
+    let noteName = document.createTextNode(`${note}`);
+    key.appendChild(noteName);
     keyz.appendChild(key);
   }
   keyboard.append(keyz);
