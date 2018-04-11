@@ -1,8 +1,8 @@
 import * as Tone from "tone";
-
+import KeyboardKeys from "./keyboardkeys";
 var synth = new Tone.Synth().toMaster();
 
-const MAXIMUM_KEYS = 24;
+const MAXIMUM_KEYS = 42;
 
 const SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
 'A', 'A#', 'B'];
@@ -22,6 +22,19 @@ const Piano = () => {
     });
     key.addEventListener('mouseup', () => {
       synth.triggerRelease();
+    });
+    const keyCode = KeyboardKeys(note);
+    document.body.addEventListener('keydown', (e) => {
+      if (e.keyCode === keyCode) {
+        synth.triggerAttack(`${note}`);
+        key.id = 'active';
+      };
+    });
+    document.body.addEventListener('keyup', (e) => {
+      if (e.keyCode === keyCode) {
+        synth.triggerRelease();
+        key.id = '';
+      };
     });
     let noteName = document.createTextNode(`${note}`);
     key.appendChild(noteName);
