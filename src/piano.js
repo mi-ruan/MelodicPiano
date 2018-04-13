@@ -1,6 +1,16 @@
 import * as Tone from "tone";
 import KeyboardKeys from "./keyboardkeys";
-var synth = new Tone.Synth().toMaster();
+var synth = new Tone.Synth({
+    oscillator : {
+    type : 'triangle12'
+  },
+  envelope : {
+    attack : 1,
+    decay : 0.3,
+    sustain: 1,
+    release: 1
+  }
+}).toMaster();
 
 const MAXIMUM_KEYS = 42;
 
