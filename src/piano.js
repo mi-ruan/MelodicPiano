@@ -1,5 +1,6 @@
 import * as Tone from "tone";
 import KeyboardKeys from "./keyboardkeys";
+import PianoQueue from './piano_queue';
 var synth = new Tone.Synth({
     oscillator : {
     type : 'triangle12'
@@ -17,7 +18,7 @@ const MAXIMUM_KEYS = 42;
 const SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
 'A', 'A#', 'B'];
 
-const Piano = () => {
+const Piano = (pianoQueue) => {
   let keyboard = document.createElement('div');
   keyboard.classList.add('keyboard');
   let keyz = document.createElement('div');
@@ -29,6 +30,7 @@ const Piano = () => {
     key.classList.add('key', `${note}`, `${color}`);
     key.addEventListener('mousedown', () => {
       synth.triggerAttack(`${note}`);
+      addNoteQueue(note, pianoQueue);
     });
     key.addEventListener('mouseup', () => {
       synth.triggerRelease();
@@ -37,6 +39,7 @@ const Piano = () => {
     document.body.addEventListener('keydown', (e) => {
       if (e.keyCode === keyCode) {
         synth.triggerAttack(`${note}`);
+        addNoteQueue(note, pianoQueue);
         key.id = 'active';
       };
     });
@@ -52,6 +55,12 @@ const Piano = () => {
   }
   keyboard.append(keyz);
   return keyboard;
+}
+
+const addNoteQueue = (note, pianoQueue) => {
+  if(pianoQueue.recordFlag){
+    pianoQueue.noteQueue.push(note);
+  }
 }
 
 const colorKeys = (num) => {
