@@ -31,15 +31,27 @@ class PianoQueue {
     });
   }
 
-  play() {
-    while(this.noteQueue.length !== 0 && this.playbackFlag) {
-      const node = this.noteQueue.shift();
-        this.synth.triggerAttackRelease(node, '.25');
-        const key = document.getElementsByClassName(`${node}`);
-        key[0].id = 'active';
-        setTimeout(() => key[0].id = '', 250);
+  play(){
+    let node = this.noteQueue.shift();
+    const playMusic = setInterval(() => {
+      this.playNote(node);
+      if (this.noteQueue.length === 0) {
+        clearInterval(playMusic);
+      }
+      node = this.noteQueue.shift();
+    }, 250);
+    if (this.playbackFlag === false) {
+      clearInterval(playMusic);
     }
   }
+
+  playNote(node){
+    this.synth.triggerAttackRelease(node, '.25');
+    const key = document.getElementsByClassName(`${node}`);
+    key[0].id = 'active';
+    setTimeout(() => key[0].id = '', 250);
+  }
+
 
   render() {
     const button = document.createElement('button');
