@@ -1,5 +1,6 @@
 class PianoQueue {
-  constructor() {
+  constructor(synth) {
+    this.synth = synth;
     this.recordFlag = false;
     this.playbackFlag = false;
     this.noteQueue = [];
@@ -19,6 +20,7 @@ class PianoQueue {
         button.removeChild(button.firstChild);
         const reset_text = document.createTextNode('Reset Listener');
         button.appendChild(reset_text);
+        this.play();
       } else if (this.recordFlag === false && this.playbackFlag === true) {
         this.playbackFlag = false;
         this.noteQueue = [];
@@ -29,6 +31,15 @@ class PianoQueue {
     });
   }
 
+  play() {
+    while(this.noteQueue.length !== 0 && this.playbackFlag) {
+      const node = this.noteQueue.shift();
+        this.synth.triggerAttackRelease(node, '.25');
+        const key = document.getElementsByClassName(`${node}`);
+        key[0].id = 'active';
+        setTimeout(() => key[0].id = '', 250);
+    }
+  }
 
   render() {
     const button = document.createElement('button');
