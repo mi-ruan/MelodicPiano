@@ -32,22 +32,23 @@ class PianoQueue {
   }
 
   play(){
+    debugger
     let node = this.noteQueue.shift();
+    var interval = this.noteQueue[0][2] - node[2];
     const playMusic = setInterval(() => {
-
       this.playNote(node);
       if (this.noteQueue.length === 0 || this.playbackFlag === false) {
         clearInterval(playMusic);
       }
       node = this.noteQueue.shift();
-    }, 250);
+    }, interval);
   }
 
   playNote(node){
-    this.synth.triggerAttackRelease(node, '.25');
-    const key = document.getElementsByClassName(`${node}`);
+    this.synth.triggerAttackRelease(node[0], `${node[1]/1000}`);
+    const key = document.getElementsByClassName(`${node[0]}`);
     key[0].id = 'active';
-    setTimeout(() => key[0].id = '', 250);
+    setTimeout(() => key[0].id = '', node[1]);
   }
 
 

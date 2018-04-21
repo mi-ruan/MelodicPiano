@@ -23,10 +23,12 @@ class Piano {
       key.classList.add(`${note}`, 'key', `${color}`);
       key.addEventListener('mousedown', () => {
         this.synth.triggerAttack(`${note}`);
-        this.addNoteQueue(note, this.pianoQueue);
+        this.startTime = Date.now();
       });
       key.addEventListener('mouseup', () => {
         this.synth.triggerRelease();
+        const duration = Date.now() - this.startTime;
+        this.addNoteQueue(note, duration, this.startTime, this.pianoQueue);
       });
       let noteName = document.createTextNode(`${note}`);
       key.appendChild(noteName);
@@ -38,7 +40,7 @@ class Piano {
       if (note !== 'break'){
         const key = document.getElementsByClassName(`${note}`);
         this.synth.triggerAttack(`${note}`);
-        this.addNoteQueue(note, this.pianoQueue);
+        this.startTime = Date.now();
         key[0].id = 'active';
       }
     });
@@ -47,15 +49,17 @@ class Piano {
       if (note !== 'break'){
         const key = document.getElementsByClassName(`${note}`);
         this.synth.triggerRelease();
+        const duration = Date.now() - this.startTime;
+        this.addNoteQueue(note, duration, this.startTime, this.pianoQueue);
         key[0].id = '';
       }
     });
     return keyboard;
   }
 
-  addNoteQueue(note, pianoQueue) {
+  addNoteQueue(note, duration, time, pianoQueue) {
     if(pianoQueue.recordFlag){
-      pianoQueue.noteQueue.push(note);
+      pianoQueue.noteQueue.push([note, duration, time]);
     }
   }
   colorKeys(num){
