@@ -1,135 +1,47 @@
-const KeyboardKeys = (note) => {
-  switch (note) {
-    case 'C3':
-      return 20; //capslock
-      break;
-    case 'C#3':
-      return 49; //1
-      break;
-    case 'D3':
-      return 81; //q
-      break;
-    case 'D#3':
-      return 50; //2
-      break;
-    case 'E3':
-      return 87; //w
-      break;
-    case 'F3':
-      return 69; //e
-      break;
-    case 'F#3':
-      return 52; //4
-      break;
-    case 'G3':
-      return 82; //r
-      break;
-    case 'G#3':
-      return 53; //5
-      break;
-    case 'A3':
-      return 84; //t
-      break;
-    case 'A#3':
-      return 54; //6
-      break;
-    case 'B3':
-      return 89; //y
-      break;
-    case 'C4':
-      return 85; //u
-      break;
-    case 'C#4':
-      return 56; //8
-      break;
-    case 'D4':
-      return 73; //i
-      break;
-    case 'D#4':
-      return 57; //9
-      break;
-    case 'E4':
-      return 79; //o
-      break;
-    case 'F4':
-      return 80; //p
-      break;
-    case 'F#4':
-      return 189; //-
-      break;
-    case 'G4':
-      return 219; //[
-      break;
-    case 'G#4':
-      return 187; //=
-      break;
-    case 'A4':
-      return 221; //]
-      break;
-    case 'A#4':
-      return 8; //backspace
-      break;
-    case 'B4':
-      return 220; //\
-      break;
-    case 'C5':
-      return 16; //shift
-      break;
-    case 'C#5':
-      return 65; //a
-      break;
-    case 'D5':
-      return 90; //z
-      break;
-    case 'D#5':
-      return 83; //s
-      break;
-    case 'E5':
-      return 88; //x
-      break;
-    case 'F5':
-      return 67; //c
-      break;
-    case 'F#5':
-      return 70; //f
-      break;
-    case 'G5':
-      return 86; //v
-      break;
-    case 'G#5':
-      return 71; //g
-      break;
-    case 'A5':
-      return 66; //b
-      break;
-    case 'A#5':
-      return 72; //h
-      break;
-    case 'B5':
-      return 78; //n
-      break;
-    case 'C6':
-      return 77; //m
-      break;
-    case 'C#6':
-      return 75; //k
-      break;
-    case 'D6':
-      return 188; //,
-      break;
-    case 'D#6':
-      return 76; //l
-      break;
-    case 'E6':
-      return 190; //.
-      break;
-    case 'F6':
-      return 191; ///
-      break;
-    default:
-      return 32; //space
-      break;
-  }
+const KeyboardKeys = (keyCode) => {
+  if (keyCode === 192) return 'C3'; // `
+  if (keyCode === 49) return 'C#3'; // 1
+  if (keyCode === 81) return 'D3'; // q
+  if (keyCode === 50) return 'D#3'; // 2
+  if (keyCode === 87) return 'E3'; // w
+  if (keyCode === 69) return 'F3'; // e
+  if (keyCode === 52) return 'F#3'; // 4
+  if (keyCode === 82) return 'G3'; // r
+  if (keyCode === 53) return 'G#3'; // 5
+  if (keyCode === 84) return 'A3'; // t
+  if (keyCode === 54) return 'A#3'; // 6
+  if (keyCode === 89) return 'B3'; // y
+  if (keyCode === 85) return 'C4'; // u
+  if (keyCode === 56) return 'C#4'; // 8
+  if (keyCode === 73) return 'D4'; // i
+  if (keyCode === 57) return 'D#4'; // 9
+  if (keyCode === 79) return 'E4'; // o
+  if (keyCode === 80) return 'F4'; // p
+  if (keyCode === 189) return 'F#4'; // -
+  if (keyCode === 219) return 'G4'; // [
+  if (keyCode === 187) return 'G#4'; // =
+  if (keyCode === 221) return 'A4'; // ]
+  if (keyCode === 8) return 'A#4'; // backspace
+  if (keyCode === 220) return 'B4'; // \
+  if (keyCode === 16 || keyCode === 13) return 'C5'; // shift or enter
+  if (keyCode === 65) return 'C#5'; // a
+  if (keyCode === 90) return 'D5'; // z
+  if (keyCode === 83) return 'D#5'; // s
+  if (keyCode === 88) return 'E5'; // x
+  if (keyCode === 67) return 'F5'; // c
+  if (keyCode === 70) return 'F#5'; // f
+  if (keyCode === 86) return 'G5'; // v
+  if (keyCode === 71) return 'G#5'; // g
+  if (keyCode === 66) return 'A5'; // b
+  if (keyCode === 72) return 'A#5'; // h
+  if (keyCode === 78) return 'B5'; // n
+  if (keyCode === 77) return 'C6'; // m
+  if (keyCode === 75) return 'C#6'; // k
+  if (keyCode === 188) return 'D6'; // ,
+  if (keyCode === 76) return 'D#6'; // l
+  if (keyCode === 190) return 'E6'; // .
+  if (keyCode === 191) return 'F6'; // /
+  if (keyCode) return 'break';
 }
 
 export default KeyboardKeys;

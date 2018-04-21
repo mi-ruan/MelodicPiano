@@ -34,15 +34,13 @@ class PianoQueue {
   play(){
     let node = this.noteQueue.shift();
     const playMusic = setInterval(() => {
+
       this.playNote(node);
-      if (this.noteQueue.length === 0) {
+      if (this.noteQueue.length === 0 || this.playbackFlag === false) {
         clearInterval(playMusic);
       }
       node = this.noteQueue.shift();
     }, 250);
-    if (this.playbackFlag === false) {
-      clearInterval(playMusic);
-    }
   }
 
   playNote(node){

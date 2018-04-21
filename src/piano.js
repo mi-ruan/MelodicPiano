@@ -28,25 +28,28 @@ class Piano {
       key.addEventListener('mouseup', () => {
         this.synth.triggerRelease();
       });
-      const keyCode = KeyboardKeys(note);
-      document.body.addEventListener('keydown', (e) => {
-        if (e.keyCode === keyCode) {
-          this.synth.triggerAttack(`${note}`);
-          this.addNoteQueue(note, this.pianoQueue);
-          key.id = 'active';
-        };
-      });
-      document.body.addEventListener('keyup', (e) => {
-        if (e.keyCode === keyCode) {
-          this.synth.triggerRelease();
-          key.id = '';
-        };
-      });
       let noteName = document.createTextNode(`${note}`);
       key.appendChild(noteName);
       keyz.appendChild(key);
     }
     keyboard.append(keyz);
+    document.body.addEventListener('keydown', (e) => {
+      const note = KeyboardKeys(e.keyCode);
+      if (note !== 'break'){
+        const key = document.getElementsByClassName(`${note}`);
+        this.synth.triggerAttack(`${note}`);
+        this.addNoteQueue(note, this.pianoQueue);
+        key[0].id = 'active';
+      }
+    });
+    document.body.addEventListener('keyup', (e) => {
+      const note = KeyboardKeys(e.keyCode)
+      if (note !== 'break'){
+        const key = document.getElementsByClassName(`${note}`);
+        this.synth.triggerRelease();
+        key[0].id = '';
+      }
+    });
     return keyboard;
   }
 
