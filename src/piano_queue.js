@@ -32,7 +32,6 @@ class PianoQueue {
   }
 
   play(){
-    debugger
     let node = this.noteQueue.shift();
     var interval = this.noteQueue[0][2] - node[2];
     const playMusic = setInterval(() => {
