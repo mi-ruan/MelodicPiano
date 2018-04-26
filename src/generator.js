@@ -16,17 +16,41 @@ class Generator{
     this.generateScale = scaleFiltered[Math.floor(Math.random() * scaleFilter.length)][0]
   }
 
-  chooseNextNote(note){
+  generateNextNote(note){
     const range = generateRange(note);
+    const rangeWeights = this.generateRangeWeights(range, note);
+    const rangeCumulWeights = cumulativeWeights(rangeWeights);
+    debugger
     return range[Math.floor(Math.random() * range.length)]
   }
 
+  generateRangeWeights(range, ownNote){
+    const rangeWeights = range.map(note => {
+      const notation = note.replace(/\d/g,'');
+      if (SCALES[this.generateScale].includes(notation)) {
+        return [note, 1];
+      } else {
+        return [note, 0];
+      }
+    });
+    return rangeWeights;
+  }
 
   run(node) {
     const note = node[0];
-    const nextNote = this.chooseNextNote(note);
+    const nextNote = this.generateNextNote(note);
     return [nextNote, node[1], node[2] + 0.25];
   }
+}
+
+const cumulativeWeights = rangeWeights => {
+  let counter = 0;
+  rangeWeights.map(array => {
+    const temp = array[1]
+    array[1] += counter;
+    counter += temp;
+  });
+  return rangeWeights;
 }
 
 
