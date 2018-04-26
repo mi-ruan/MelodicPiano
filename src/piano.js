@@ -3,7 +3,7 @@ import PianoQueue from './piano_queue';
 
 const MAXIMUM_KEYS = 42;
 
-const SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
+const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
 'A', 'A#', 'B'];
 
 class Piano {
@@ -18,7 +18,7 @@ class Piano {
     keyz.classList.add('keys');
     for (let i = 0; i < MAXIMUM_KEYS; i++) {
       const key = document.createElement('div');
-      const note = SCALE[i % 12] + (Math.floor(i / 12) + 3);
+      const note = NOTES[i % 12] + (Math.floor(i / 12) + 3);
       const color = this.colorKeys(i%12);
       key.classList.add(`${note}`, 'key', `${color}`);
       key.addEventListener('mousedown', () => {

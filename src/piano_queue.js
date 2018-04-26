@@ -1,3 +1,5 @@
+import Generator from './generator';
+
 class PianoQueue {
   constructor(synth) {
     this.synth = synth;
@@ -32,6 +34,9 @@ class PianoQueue {
   }
 
   play(){
+    const generator = new Generator(this.noteQueue);
+    let lastElement = this.noteQueue[this.noteQueue.length -1]
+    this.noteQueue.push(generator.run(lastElement));
     let node = this.noteQueue.shift();
     var interval = this.noteQueue[0][2] - node[2];
     const playMusic = setInterval(() => {
@@ -39,6 +44,8 @@ class PianoQueue {
       if (this.noteQueue.length === 0 || this.playbackFlag === false) {
         clearInterval(playMusic);
       }
+      lastElement = this.noteQueue[this.noteQueue.length - 1]
+      this.noteQueue.push(generator.run(lastElement));
       node = this.noteQueue.shift();
     }, interval);
   }
