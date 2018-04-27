@@ -14,7 +14,24 @@ class Generator{
       return scaleIncludeNote(scale, onlyNotes);
     });
     const scaleFiltered = scaleFilter(scaleChoices);
-    this.generateScale = scaleFiltered[Math.floor(Math.random() * scaleFilter.length)][0]
+    this.generateScale = scaleFiltered[Math.floor(Math.random() * scaleFilter.length)][0];
+    this.initialNoteInterval = {};
+    for (let i = 0; i < notes.length - 1; i++) {
+      const octavei = notes[i].replace(/\D/g,'');
+      const octavej = notes[i + 1].replace(/\D/g,'');
+      const posi = (12 * (octavei - 3)) + NOTES.indexOf(onlyNotes[i]);
+      const posj = (12 * (octavej - 3)) + NOTES.indexOf(onlyNotes[i+1]);
+      if (this.initialNoteInterval[posi - posj] === undefined){
+        this.initialNoteInterval[posi - posj] = 1;
+      } else {
+        this.initialNoteInterval[posi - posj] += 1;
+      }
+      if (this.initialNoteInterval[posj - posi] === undefined) {
+        this.initialNoteInterval[posj - posi] = 1;
+      } else {
+        this.initialNoteInterval[posj - posi] += 1;
+      }
+    }
   }
 
   generateNextNote(note){
@@ -29,12 +46,12 @@ class Generator{
     const rangeWeights = range.map(note => {
       const notation = note.replace(/\d/g,'');
       if (SCALES[this.generateScale].includes(notation)) {
-        note = [note, 1];
+        note = [note, 50];
       } else {
         note = [note, 0];
       }
       if (this.initialNotes.includes(note)) {
-        note[1] += 5;
+        note[1] += 100;
       }
       return note;
     });
@@ -45,9 +62,12 @@ class Generator{
       chord = [-12, -10, -6, -3, -1, 0, 1, 3, 6, 10, 12];
     }
     const chordIndex = chord.map(note => note + ownNoteIndex);
-    const chordValidIndex = chord.filter(note => note >= 0 && note < range.length);
-    chordValidIndex.forEach(note => rangeWeights[note][1] += 5);
-
+    const chordValidIndex = chordIndex.filter(note => note >= 0 && note < range.length);
+    chordValidIndex.forEach(note => rangeWeights[note][1] += 50);
+    const noteIntervalIndex = Object.keys(this.initialNoteInterval)
+    .map(interval => [parseInt(interval) + ownNoteIndex, parseInt(interval)]);
+    const validNoteIntervalIndex = noteIntervalIndex.filter(note => note[0] >= 0 && note[0] < range.length);
+    validNoteIntervalIndex.forEach(note => rangeWeights[note[0]][1] += 50 * this.initialNoteInterval[note[1]]);
     return rangeWeights;
   }
 
