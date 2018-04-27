@@ -1,10 +1,8 @@
 import KeyboardKeys from "./keyboardkeys";
 import PianoQueue from './piano_queue';
+import NOTES from './notes';
 
 const MAXIMUM_KEYS = 42;
-
-const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
-'A', 'A#', 'B'];
 
 class Piano {
   constructor(pianoQueue, synth){

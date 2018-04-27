@@ -1,3 +1,6 @@
+import NOTES from './notes';
+import SCALES from './scales';
+
 class Generator{
   constructor(noteQueue){
     this.initialParams = noteQueue;
@@ -46,21 +49,19 @@ class Generator{
     const intervals = this.initialParams.map((node) => node[2]);
     let calInterval = [];
     if (intervals.length < 2){
-      this.cumulativeIntervalWeights = [0.5, 1];
+      calInterval.push(0.5);
     } else {
       for(let i = 1; i < intervals.length; i++){
         calInterval.push(intervals[i] - intervals[i - 1]);
       }
-      const intervalArray = normalizer(calInterval);
-      this.cumulativeIntervalWeights = cumulativeWeights(intervalArray);
     }
+    const intervalArray = normalizer(calInterval);
+    this.cumulativeIntervalWeights = cumulativeWeights(intervalArray);
   }
-
 
   generateNextNote(note){
     const range = generateRange(note);
     const rangeWeights = this.generateRangeWeights(range, note);
-    debugger
     const rangeCumulWeights = cumulativeWeights(rangeWeights);
     return chooseNextItem(rangeCumulWeights);
   }
@@ -70,7 +71,7 @@ class Generator{
     const rangeWeights = range.map(note => {
       const notation = note.replace(/\d/g,'');
       if (SCALES[this.generateScale].includes(notation)) {
-        note = [note, 25];
+        note = [note, 50];
       } else {
         note = [note, 0];
       }
@@ -80,15 +81,15 @@ class Generator{
       return note;
     });
 
-    let chord;
-    if (this.generateScale.includes('Maj')){
-      chord = [-12, -7, -5, -4, -2, 0, 2, 4, 5, 7, 12];
-    } else {
-      chord = [-12, -10, -6, -3, -1, 0, 1, 3, 6, 10, 12];
-    }
-    const chordIndex = chord.map(note => note + ownNoteIndex);
-    const chordValidIndex = chordIndex.filter(note => note >= 0 && note < range.length);
-    chordValidIndex.forEach(note => rangeWeights[note][1] += 50);
+    // let chord;
+    // if (this.generateScale.includes('Maj')){
+    //   chord = [-12, -7, -5, -4, -2, 0, 2, 4, 5, 7, 12];
+    // } else if(this.generateScale.includes('Min')) {
+    //   chord = [-12, -10, -6, -3, -1, 0, 1, 3, 6, 10, 12];
+    // }
+    // const chordIndex = chord.map(note => note + ownNoteIndex);
+    // const chordValidIndex = chordIndex.filter(note => note >= 0 && note < range.length);
+    // chordValidIndex.forEach(note => rangeWeights[note][1] += 25);
 
     const noteIntervalIndex = Object.keys(this.initialNoteInterval)
     .map(interval => [parseInt(interval) + ownNoteIndex, parseInt(interval)]);
@@ -108,7 +109,7 @@ class Generator{
   run(node) {
     const note = node[0];
     const nextNote = this.generateNextNote(note);
-    return [nextNote, this.generateNextDuration(), this.generateNextInterval()];
+    return [nextNote, this.generateNextDuration(), node[2] + this.generateNextInterval()];
   }
 }
 
@@ -132,7 +133,6 @@ const cumulativeWeights = rangeWeights => {
   });
   return rangeWeights;
 }
-
 
 const generateRange = note => {
   const notation = note.replace(/\d/g,'');
@@ -162,6 +162,7 @@ const generateRange = note => {
 
 const normalizer = array => {
   const firstDuration = array[0];
+  array.push(firstDuration * 2);
   const normalizedDuration = array.map(dur => Math.round(dur / firstDuration) * firstDuration);
   const durationWeights = {};
   normalizedDuration.forEach(dur => {
@@ -176,7 +177,8 @@ const normalizer = array => {
 }
 
 const scaleIncludeNote = (scale, notes) => {
-  let counter = 0
+  let counter = 0;
+  if (SCALES[scale][0] === notes[0]) { counter++ };
   notes.forEach((note) => {
     if (SCALES[scale].includes(note)){ counter++ };
   });
@@ -188,24 +190,5 @@ const scaleFilter = (choices) => {
   const maxWeight = Math.max(...weights);
   return choices.filter((choice) => choice[1] === maxWeight);
 }
-
-const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
-'A', 'A#', 'B'];
-
-const SCALES = {
-  'CMaj': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
-  'DMaj': ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'],
-  'EMaj': ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'],
-  'FMaj': ['F', 'G', 'A', 'A#', 'C', 'D', 'E'],
-  'GMaj': ['G', 'A', 'B', 'C', 'D', 'E', 'F#'],
-  'AMaj': ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#'],
-  'BMaj': ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#'],
-  'C#Maj': ['C#', 'D#', 'F', 'F#', 'G#', 'A#', 'C'],
-  'D#Maj': ['D#', 'F', 'G', 'G#', 'A#', 'C', 'D'],
-  'F#Maj': ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'F'],
-  'G#Maj': ['G#', 'A#', 'C', 'C#', 'D#', 'F', 'G'],
-  'A#Maj': ['A#', 'C', 'D', 'D#', 'F', 'G', 'A']
-}
-
 
 export default Generator;

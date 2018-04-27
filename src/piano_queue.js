@@ -47,6 +47,7 @@ class PianoQueue {
         lastElement = this.noteQueue[this.noteQueue.length - 1]
         this.noteQueue.push(generator.run(lastElement))
         node = this.noteQueue.shift();
+        interval = this.noteQueue[0][2] - node[2];
       }
     }, interval);
   }
