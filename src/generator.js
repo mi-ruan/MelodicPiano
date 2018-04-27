@@ -6,9 +6,10 @@ class Generator{
 
   generateNoteWeights(){
     const notes = this.initialParams.map((node) => node[0]);
-    const onlyNotes = notes.map((notes) => {
-      return notes.replace(/\d/g,'');
+    const onlyNotes = notes.map((note) => {
+      return note.replace(/\d/g,'');
     });
+    this.initialNotes = notes;
     const scaleChoices = Object.keys(SCALES).map((scale) => {
       return scaleIncludeNote(scale, onlyNotes);
     });
@@ -20,19 +21,33 @@ class Generator{
     const range = generateRange(note);
     const rangeWeights = this.generateRangeWeights(range, note);
     const rangeCumulWeights = cumulativeWeights(rangeWeights);
-    debugger
-    return range[Math.floor(Math.random() * range.length)]
+    return chooseNextNote(rangeCumulWeights);
   }
 
   generateRangeWeights(range, ownNote){
+    const ownNoteIndex = range.indexOf(ownNote);
     const rangeWeights = range.map(note => {
       const notation = note.replace(/\d/g,'');
       if (SCALES[this.generateScale].includes(notation)) {
-        return [note, 1];
+        note = [note, 1];
       } else {
-        return [note, 0];
+        note = [note, 0];
       }
+      if (this.initialNotes.includes(note)) {
+        note[1] += 5;
+      }
+      return note;
     });
+    let chord;
+    if (this.generateScale.includes('Maj')){
+      chord = [-12, -7, -5, -4, -2, 0, 2, 4, 5, 7, 12];
+    } else {
+      chord = [-12, -10, -6, -3, -1, 0, 1, 3, 6, 10, 12];
+    }
+    const chordIndex = chord.map(note => note + ownNoteIndex);
+    const chordValidIndex = chord.filter(note => note >= 0 && note < range.length);
+    chordValidIndex.forEach(note => rangeWeights[note][1] += 5);
+
     return rangeWeights;
   }
 
@@ -40,6 +55,17 @@ class Generator{
     const note = node[0];
     const nextNote = this.generateNextNote(note);
     return [nextNote, node[1], node[2] + 0.25];
+  }
+}
+
+const chooseNextNote = cumulWeights => {
+  const totalWeight = cumulWeights[cumulWeights.length - 1][1];
+  const choice = Math.random() * totalWeight;
+  for (let i = 0; i < cumulWeights.length; i++) {
+    if (cumulWeights[i][1] > choice) {
+      return cumulWeights[i][0];
+      break
+    }
   }
 }
 

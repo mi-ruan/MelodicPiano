@@ -43,10 +43,11 @@ class PianoQueue {
       this.playNote(node);
       if (this.noteQueue.length === 0 || this.playbackFlag === false) {
         clearInterval(playMusic);
+      } else {
+        lastElement = this.noteQueue[this.noteQueue.length - 1]
+        this.noteQueue.push(generator.run(lastElement))
+        node = this.noteQueue.shift();
       }
-      lastElement = this.noteQueue[this.noteQueue.length - 1]
-      this.noteQueue.push(generator.run(lastElement));
-      node = this.noteQueue.shift();
     }, interval);
   }
 
