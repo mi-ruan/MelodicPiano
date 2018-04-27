@@ -2,6 +2,8 @@ class Generator{
   constructor(noteQueue){
     this.initialParams = noteQueue;
     this.generateNoteWeights();
+    this.generateDurationWeights();
+    this.generateIntervalWeights();
   }
 
   generateNoteWeights(){
@@ -34,11 +36,33 @@ class Generator{
     }
   }
 
+  generateDurationWeights(){
+    const durations = this.initialParams.map((node) => node[1]);
+    const durationArray = normalizer(durations);
+    this.cumulativeDurationWeights = cumulativeWeights(durationArray);
+  }
+
+  generateIntervalWeights() {
+    const intervals = this.initialParams.map((node) => node[2]);
+    let calInterval = [];
+    if (intervals.length < 2){
+      this.cumulativeIntervalWeights = [0.5, 1];
+    } else {
+      for(let i = 1; i < intervals.length; i++){
+        calInterval.push(intervals[i] - intervals[i - 1]);
+      }
+      const intervalArray = normalizer(calInterval);
+      this.cumulativeIntervalWeights = cumulativeWeights(intervalArray);
+    }
+  }
+
+
   generateNextNote(note){
     const range = generateRange(note);
     const rangeWeights = this.generateRangeWeights(range, note);
+    debugger
     const rangeCumulWeights = cumulativeWeights(rangeWeights);
-    return chooseNextNote(rangeCumulWeights);
+    return chooseNextItem(rangeCumulWeights);
   }
 
   generateRangeWeights(range, ownNote){
@@ -46,15 +70,16 @@ class Generator{
     const rangeWeights = range.map(note => {
       const notation = note.replace(/\d/g,'');
       if (SCALES[this.generateScale].includes(notation)) {
-        note = [note, 50];
+        note = [note, 25];
       } else {
         note = [note, 0];
       }
-      if (this.initialNotes.includes(note)) {
-        note[1] += 100;
+      if (this.initialNotes.includes(note[0])) {
+        note[1] += 200;
       }
       return note;
     });
+
     let chord;
     if (this.generateScale.includes('Maj')){
       chord = [-12, -7, -5, -4, -2, 0, 2, 4, 5, 7, 12];
@@ -64,21 +89,30 @@ class Generator{
     const chordIndex = chord.map(note => note + ownNoteIndex);
     const chordValidIndex = chordIndex.filter(note => note >= 0 && note < range.length);
     chordValidIndex.forEach(note => rangeWeights[note][1] += 50);
+
     const noteIntervalIndex = Object.keys(this.initialNoteInterval)
     .map(interval => [parseInt(interval) + ownNoteIndex, parseInt(interval)]);
     const validNoteIntervalIndex = noteIntervalIndex.filter(note => note[0] >= 0 && note[0] < range.length);
-    validNoteIntervalIndex.forEach(note => rangeWeights[note[0]][1] += 50 * this.initialNoteInterval[note[1]]);
+    validNoteIntervalIndex.forEach(note => rangeWeights[note[0]][1] += 100 * this.initialNoteInterval[note[1]]);
     return rangeWeights;
+  }
+
+  generateNextDuration(){
+    return chooseNextItem(this.cumulativeDurationWeights);
+  }
+
+  generateNextInterval(){
+    return chooseNextItem(this.cumulativeIntervalWeights);
   }
 
   run(node) {
     const note = node[0];
     const nextNote = this.generateNextNote(note);
-    return [nextNote, node[1], node[2] + 0.25];
+    return [nextNote, this.generateNextDuration(), this.generateNextInterval()];
   }
 }
 
-const chooseNextNote = cumulWeights => {
+const chooseNextItem = cumulWeights => {
   const totalWeight = cumulWeights[cumulWeights.length - 1][1];
   const choice = Math.random() * totalWeight;
   for (let i = 0; i < cumulWeights.length; i++) {
@@ -124,6 +158,21 @@ const generateRange = note => {
     range = range.slice(0, range.indexOf('F6') + 1);
   }
   return range;
+}
+
+const normalizer = array => {
+  const firstDuration = array[0];
+  const normalizedDuration = array.map(dur => Math.round(dur / firstDuration) * firstDuration);
+  const durationWeights = {};
+  normalizedDuration.forEach(dur => {
+    if (durationWeights[dur] === undefined) {
+      durationWeights[dur] = 1;
+    } else {
+      durationWeights[dur] += 1;
+    }
+  });
+  const durationArray = Object.keys(durationWeights).map(key => [Number(key), durationWeights[key]]);
+  return durationArray;
 }
 
 const scaleIncludeNote = (scale, notes) => {
