@@ -62,3 +62,31 @@ body {
   border-radius:0 0 3px 3px;
 	box-shadow: 3px 3px 4px rgba(255,255,255,0.2) inset, 0 10px 10px 32px rgba(0,0,0,0.6) inset, 0 5px 4px rgba(0,0,0,0.5)
 }
+
+.piano-queue-button {
+  border-radius: 5px;
+  border: 1px solid #666666;
+  box-shadow: 1px 1px black;
+  padding: 5px;
+  margin: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.piano-queue-button:active {
+  box-shadow: 1px 1px 1px black inset;
+}
+
+.record {
+  color: red;
+  border: 1px solid red;
+  border-radius: 3px;
+}
+
+.playback {
+  color: green;
+  border: 1px solid green;
+  border-radius: 7px;
+}

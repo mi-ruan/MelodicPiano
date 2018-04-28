@@ -15,12 +15,15 @@ class PianoQueue {
         this.recordFlag = true;
         button.removeChild(button.firstChild);
         const record_text = document.createTextNode('Press to Stop Listening');
+        button.classList.add('record');
         button.appendChild(record_text);
       } else if (this.recordFlag === true && this.playbackFlag === false) {
         this.recordFlag = false;
         this.playbackFlag = true;
         button.removeChild(button.firstChild);
         const reset_text = document.createTextNode('Reset Listener');
+        button.classList.remove('record');
+        button.classList.add('playback');
         button.appendChild(reset_text);
         this.play();
       } else if (this.recordFlag === false && this.playbackFlag === true) {
@@ -28,6 +31,7 @@ class PianoQueue {
         this.noteQueue = [];
         button.removeChild(button.firstChild);
         const button_text = document.createTextNode('Listen to Notes');
+        button.classList.remove('playback');
         button.appendChild(button_text);
       }
     });

@@ -11,10 +11,17 @@ class Generator{
 
   generateNoteWeights(){
     const notes = this.initialParams.map((node) => node[0]);
+    this.initialNotes = {};
+    notes.forEach(note => {
+      if (this.initialNotes[note] === undefined) {
+        this.initialNotes[note] = 1;
+      } else {
+        this.initialNotes[note] += 1;
+      }
+    });
     const onlyNotes = notes.map((note) => {
       return note.replace(/\d/g,'');
     });
-    this.initialNotes = notes;
     const scaleChoices = Object.keys(SCALES).map((scale) => {
       return scaleIncludeNote(scale, onlyNotes);
     });
@@ -26,11 +33,6 @@ class Generator{
       const octavej = notes[i + 1].replace(/\D/g,'');
       const posi = (12 * (octavei - 3)) + NOTES.indexOf(onlyNotes[i]);
       const posj = (12 * (octavej - 3)) + NOTES.indexOf(onlyNotes[i+1]);
-      if (this.initialNoteInterval[posi - posj] === undefined){
-        this.initialNoteInterval[posi - posj] = 1;
-      } else {
-        this.initialNoteInterval[posi - posj] += 1;
-      }
       if (this.initialNoteInterval[posj - posi] === undefined) {
         this.initialNoteInterval[posj - posi] = 1;
       } else {
@@ -75,26 +77,17 @@ class Generator{
       } else {
         note = [note, 0];
       }
-      if (this.initialNotes.includes(note[0])) {
-        note[1] += 200;
+      if (Object.keys(this.initialNotes).includes(note[0])) {
+        note[1] += 200 * this.initialNotes[note[0]];
       }
       return note;
     });
-
-    // let chord;
-    // if (this.generateScale.includes('Maj')){
-    //   chord = [-12, -7, -5, -4, -2, 0, 2, 4, 5, 7, 12];
-    // } else if(this.generateScale.includes('Min')) {
-    //   chord = [-12, -10, -6, -3, -1, 0, 1, 3, 6, 10, 12];
-    // }
-    // const chordIndex = chord.map(note => note + ownNoteIndex);
-    // const chordValidIndex = chordIndex.filter(note => note >= 0 && note < range.length);
-    // chordValidIndex.forEach(note => rangeWeights[note][1] += 25);
 
     const noteIntervalIndex = Object.keys(this.initialNoteInterval)
     .map(interval => [parseInt(interval) + ownNoteIndex, parseInt(interval)]);
     const validNoteIntervalIndex = noteIntervalIndex.filter(note => note[0] >= 0 && note[0] < range.length);
     validNoteIntervalIndex.forEach(note => rangeWeights[note[0]][1] += 100 * this.initialNoteInterval[note[1]]);
+    debugger
     return rangeWeights;
   }
 
