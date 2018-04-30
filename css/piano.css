@@ -79,6 +79,7 @@ footer {
   align-items: flex-end;
   width: 100%;
   border: 1px solid black;
+  border-radius: 4px;
   box-sizing: border-box;
   justify-content: center;
   padding: 5px;
@@ -94,7 +95,6 @@ footer {
 
 .keys > .white{
   background-color: white;
-  border-radius:0 0 4px 4px;
   box-shadow: 4px -16px 6px rgba(255,255,255,0.8) inset, 6px 4px 8px #ccc inset, 1px 2px 0px rgba(0,0,0,0.2);
 }
 
