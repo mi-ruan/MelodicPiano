@@ -2,6 +2,22 @@ html {
   min-height: 100%;
 }
 
+h1 {
+  font-weight: bold;
+  font-size: 40px;
+  color: #11130C;
+}
+
+header {
+  text-align: center;
+  font-style: italic;
+  color: #4e2902;
+}
+
+header > p {
+  margin: 10px;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -16,6 +32,7 @@ body {
   overflow: hidden;
   z-index: -100;
   background: url('../images/background.jpg') center center / cover no-repeat;
+  font-family: 'Titan One', cursive;
 }
 
 footer {
@@ -27,10 +44,10 @@ footer {
   right: 0;
   width: 100%;
   padding-bottom: 25px;
-  font-family: 'Titan One', cursive;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  color: #212020;
 }
 
 .footer-share{
@@ -115,16 +132,16 @@ footer {
 
 .piano-queue-button {
   border-radius: 5px;
-  border: 1px solid #666666;
+  border: 1px solid #010119;
   box-shadow: 1px 1px black;
   padding: 5px;
   margin: 10px;
-  height: 25px;
   width: auto;
-  text-align: center;
   text-decoration: none;
   font-weight: bold;
   cursor: pointer;
+  color: #010119;
+  font-family: 'Audiowide', cursive;
 }
 
 .piano-queue-button:active {
@@ -132,13 +149,13 @@ footer {
 }
 
 .record {
-  color: red;
-  border: 1px solid red;
-  border-radius: 3px;
+  color: #FF1616;
+  border: 1px solid #FF1616;
+  border-radius: 7px;
 }
 
 .playback {
-  color: green;
-  border: 1px solid green;
+  color: #007721;
+  border: 1px solid #007721;
   border-radius: 7px;
 }

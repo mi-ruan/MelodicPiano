@@ -30,7 +30,7 @@ class PianoQueue {
         this.playbackFlag = false;
         this.noteQueue = [];
         button.removeChild(button.firstChild);
-        const button_text = document.createTextNode('Listen to Notes');
+        const button_text = document.createTextNode('Listen for Notes');
         button.classList.remove('playback');
         button.appendChild(button_text);
       }

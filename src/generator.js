@@ -87,7 +87,6 @@ class Generator{
     .map(interval => [parseInt(interval) + ownNoteIndex, parseInt(interval)]);
     const validNoteIntervalIndex = noteIntervalIndex.filter(note => note[0] >= 0 && note[0] < range.length);
     validNoteIntervalIndex.forEach(note => rangeWeights[note[0]][1] += 100 * this.initialNoteInterval[note[1]]);
-    debugger
     return rangeWeights;
   }
 
