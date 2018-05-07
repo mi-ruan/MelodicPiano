@@ -67,7 +67,7 @@ class PianoQueue {
   render() {
     const button = document.createElement('button');
     button.classList.add('piano-queue-button');
-    const button_text = document.createTextNode('Listen to Notes');
+    const button_text = document.createTextNode('Listen for Notes');
     button.appendChild(button_text);
     document.body.appendChild(button);
     this.handleListener();
