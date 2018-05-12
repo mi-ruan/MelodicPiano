@@ -16,6 +16,18 @@ document.addEventListener('DOMContentLoaded',() => {
     }
   }).toMaster();
 
+  document.documentElement.addEventListener(
+    "mousedown", function(){
+      if (Tone.context.state !== 'running') {
+      Tone.context.resume();
+    }});
+
+    document.documentElement.addEventListener(
+      "keydown", function(){
+        if (Tone.context.state !== 'running') {
+        Tone.context.resume();
+      }});
+
   const pianoQueue = new PianoQueue(synth);
   pianoQueue.render();
 
